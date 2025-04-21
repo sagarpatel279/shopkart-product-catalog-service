@@ -8,7 +8,7 @@ import java.util.List;
 public interface ProductService {
     Product createProduct(Product product) throws FakeStoreAPIException;
     Product updateProduct(Long ProductId, Product product) throws FakeStoreAPIException;
-    Product replaceProduct(Long ProductId, Product product);
+    Product replaceProduct(Long ProductId, Product product) throws FakeStoreAPIException;
     List<Product> getAllProducts();
     Product getProduct(Long productId);
     Boolean deleteProduct(Long productId);
