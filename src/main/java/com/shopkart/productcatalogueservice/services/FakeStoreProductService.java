@@ -4,8 +4,15 @@ import com.shopkart.productcatalogueservice.dtos.FakeStoreAPIProductDTO;
 import com.shopkart.productcatalogueservice.dtos.ProductMapper;
 import com.shopkart.productcatalogueservice.exceptions.FakeStoreAPIException;
 import com.shopkart.productcatalogueservice.models.Product;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Service
 public class FakeStoreProductService implements ProductService{
@@ -23,4 +30,36 @@ public class FakeStoreProductService implements ProductService{
         }
         return ProductMapper.toProduct(requestDTO);
     }
+
+    @Override
+    public Product updateProduct(Long ProductId, Product product) throws FakeStoreAPIException {
+        FakeStoreAPIProductDTO requestDTO=ProductMapper.toFakeStoreAPIProductRequestDTO(product);
+        HttpEntity<FakeStoreAPIProductDTO> requestEntity=new HttpEntity<>(requestDTO);
+        ResponseEntity<FakeStoreAPIProductDTO> responseEntity= restTemplate.exchange("https://fakestoreapi.com/products/"+ProductId.intValue(), HttpMethod.PATCH,requestEntity,FakeStoreAPIProductDTO.class);
+        if(responseEntity.getStatusCode() != HttpStatus.OK || responseEntity.getBody() == null){
+            throw new FakeStoreAPIException("Something went wrong with fake-store api..");
+        }
+        return ProductMapper.toProduct(responseEntity.getBody());
+    }
+
+    @Override
+    public Product replaceProduct(Long ProductId, Product product) {
+        return null;
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return List.of();
+    }
+
+    @Override
+    public Product getProduct(Long productId) {
+        return null;
+    }
+
+    @Override
+    public Boolean deleteProduct(Long productId) {
+        return null;
+    }
+
 }

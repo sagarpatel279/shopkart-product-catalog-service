@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/categories/")
+@RequestMapping("/categories")
 public class CategoryController {
 
     public ResponseEntity<?> getAllCategories(){

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("products")
+@RequestMapping("/products")
 public class ProductController {
     private ProductService productService;
 
@@ -23,7 +23,7 @@ public class ProductController {
         return null;
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getProduct(@PathVariable("id") Long id){
         return null;
     }
@@ -36,17 +36,20 @@ public class ProductController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PatchMapping("{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id,@RequestBody ProductDTO requestDto){
-        return null;
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id,@RequestBody ProductDTO requestDto) throws FakeStoreAPIException {
+        GetProductResponseDTO responseDTO=new GetProductResponseDTO();
+        responseDTO.setProductDTO(ProductMapper.toProductDTO(productService.updateProduct(id,ProductMapper.toProduct(requestDto))));
+        responseDTO.setResponseStatus(ResponseStatus.SUCCESS);
+        return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> replaceProduct(@PathVariable("id") Long id,@RequestBody ProductDTO requestDto){
         return null;
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id){
         return null;
     }
