@@ -33,4 +33,5 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
 }
