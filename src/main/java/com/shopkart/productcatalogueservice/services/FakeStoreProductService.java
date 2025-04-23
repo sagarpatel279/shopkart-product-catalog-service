@@ -18,11 +18,9 @@ import java.util.List;
 @Service
 public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
-    private final String baseUrl;
     private String fakeStoreUrl;
     public FakeStoreProductService(RestTemplate restTemplate,@Value("${fake-store-api-url}") String baseUrl){
         this.restTemplate=restTemplate;
-        this.baseUrl=baseUrl;
         fakeStoreUrl=baseUrl+"/products";
     }
     @Override

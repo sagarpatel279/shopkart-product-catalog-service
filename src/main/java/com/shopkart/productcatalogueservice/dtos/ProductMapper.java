@@ -5,7 +5,6 @@ import com.shopkart.productcatalogueservice.dtos.records.ProductRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.models.Rating;
-import org.springframework.data.util.Pair;
 
 import java.util.List;
 
@@ -62,6 +61,7 @@ public class ProductMapper {
     }
     public static Product toProduct(FakeStoreProductRecord fakeStoreProductRecord){
         Product product=new Product();
+        FakeStoreProductRecord.FakeStoreRatingRecord fakeStoreRatingRecord= fakeStoreProductRecord.rating();
         product.setId(fakeStoreProductRecord.id()!=null? fakeStoreProductRecord.id().longValue() :null);
         product.setName(fakeStoreProductRecord.title());
         product.setPrice(fakeStoreProductRecord.price()!=null? fakeStoreProductRecord.price().doubleValue():null);
@@ -69,22 +69,24 @@ public class ProductMapper {
         product.setImageUrl(fakeStoreProductRecord.image());
         product.setCategory(new Category(fakeStoreProductRecord.category()));
         Rating rating=new Rating();
-        rating.setRate(fakeStoreProductRecord.rating().rate());
+        rating.setRate(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.rate():null);
         rating.setProduct(product);
         product.setRatings(List.of(rating));
-        product.setCount(fakeStoreProductRecord.rating().count());
+        product.setCount(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.count():null);
         return product;
     }
     public static ProductRecord toProductRecord(Product product){
+        Double rate=product.getRatings()!=null?product.getRatings().getFirst().getRate():null;
         return new ProductRecord(product.getId(),
                 product.getName(),
                 product.getPrice(),
                 product.getDescription(),
                 product.getCategory()!=null? product.getCategory().getName():null,
                 product.getImageUrl(),
-                new ProductRecord.RatingResponseRecord(product.getRatings().getFirst().getRate(),product.getCount()));
+                new ProductRecord.RatingResponseRecord(rate,product.getCount()));
     }
     public static FakeStoreProductRecord toFakeStoreProductRecord(Product product){
+        Double rate=product.getRatings()!=null?product.getRatings().getFirst().getRate():null;
         return new FakeStoreProductRecord(
                 product.getId()!=null?product.getId().intValue():null,
                 product.getName(),
@@ -92,7 +94,7 @@ public class ProductMapper {
                 product.getDescription(),
                 product.getCategory()!=null? product.getCategory().getName():null,
                 product.getImageUrl(),
-                new FakeStoreProductRecord.FakeStoreRatingRecord(product.getRatings().getFirst().getRate(),product.getCount()));
+                new FakeStoreProductRecord.FakeStoreRatingRecord(rate,product.getCount()));
     }
     public static FakeStoreProductRecord toFakeStoreProductRecord(ProductRecord productRecord){
         return new FakeStoreProductRecord(
@@ -106,6 +108,7 @@ public class ProductMapper {
                 );
     }
     public static ProductRecord toProductRecord(FakeStoreProductRecord requestRecord){
+        FakeStoreProductRecord.FakeStoreRatingRecord fakeStoreRatingRecord= requestRecord.rating();
         return new ProductRecord(
                 requestRecord.id()!=null? requestRecord.id().longValue():null,
                 requestRecord.title(),
@@ -113,7 +116,7 @@ public class ProductMapper {
                 requestRecord.description(),
                 requestRecord.image(),
                 requestRecord.category(),
-                new ProductRecord.RatingResponseRecord(requestRecord.rating().rate(), requestRecord.rating().count()));
+                new ProductRecord.RatingResponseRecord(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.rate():null, fakeStoreRatingRecord!=null?fakeStoreRatingRecord.count():null));
     }
 }
 
