@@ -7,7 +7,7 @@ public record FakeStoreProductRecord(
         String description,
         String category,
         String image,
-        FakeStoreRatingRecord ratings
+        FakeStoreRatingRecord rating
 ) {
     public record FakeStoreRatingRecord(
             Double rate,

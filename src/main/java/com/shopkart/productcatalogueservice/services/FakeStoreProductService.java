@@ -3,6 +3,7 @@ package com.shopkart.productcatalogueservice.services;
 import com.shopkart.productcatalogueservice.dtos.FakeStoreAPIProductDTO;
 import com.shopkart.productcatalogueservice.dtos.ProductMapper;
 import com.shopkart.productcatalogueservice.dtos.records.FakeStoreProductRecord;
+import com.shopkart.productcatalogueservice.dtos.records.ProductRecord;
 import com.shopkart.productcatalogueservice.exceptions.FakeStoreAPIException;
 import com.shopkart.productcatalogueservice.models.Product;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,17 +27,17 @@ public class FakeStoreProductService implements ProductService{
     }
     @Override
     public Product createProduct(Product product) throws FakeStoreAPIException {
-        FakeStoreProductRecord requestRecord= ProductMapper.toFakeStoreProductRecord(ProductMapper.toProductRecord(product));
+        FakeStoreProductRecord requestRecord= ProductMapper.toFakeStoreProductRecord(product);
         requestRecord= restTemplate.postForObject(fakeStoreUrl,requestRecord,FakeStoreProductRecord.class);
         if(requestRecord==null){
             throw new FakeStoreAPIException("Something went wrong");
         }
-        return ProductMapper.toProduct(ProductMapper.toProductRecord(requestRecord));
+        return ProductMapper.toProduct(requestRecord);
     }
 
     @Override
     public Product updateProduct(Long ProductId, Product product) throws FakeStoreAPIException {
-        FakeStoreProductRecord requestRecord =ProductMapper.toFakeStoreProductRecord(ProductMapper.toProductRecord(product));
+        FakeStoreProductRecord requestRecord =ProductMapper.toFakeStoreProductRecord(product);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<FakeStoreProductRecord> requestEntity=new HttpEntity<>(requestRecord,headers);
@@ -44,13 +45,13 @@ public class FakeStoreProductService implements ProductService{
         if(responseEntity.getBody() == null){
             throw new FakeStoreAPIException("Something went wrong with fake-store api..");
         }
-        return ProductMapper.toProduct(ProductMapper.toProductRecord(responseEntity.getBody()));
+        return ProductMapper.toProduct(responseEntity.getBody());
     }
 
     @Override
     public Product replaceProduct(Long ProductId, Product product) throws FakeStoreAPIException {
         System.out.println("URL: "+fakeStoreUrl+"/"+ProductId.intValue());
-        FakeStoreProductRecord requestRecord =ProductMapper.toFakeStoreProductRecord(ProductMapper.toProductRecord(product));
+        FakeStoreProductRecord requestRecord =ProductMapper.toFakeStoreProductRecord(product);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<FakeStoreProductRecord> requestEntity=new HttpEntity<>(requestRecord,headers);
@@ -58,7 +59,7 @@ public class FakeStoreProductService implements ProductService{
         if(responseEntity.getBody() == null || !responseEntity.hasBody()) {
             throw new FakeStoreAPIException("Something went wrong with fake-store api...");
         }
-        return ProductMapper.toProduct(ProductMapper.toProductRecord(requestRecord));
+        return ProductMapper.toProduct(requestRecord);
     }
 
     @Override
@@ -67,7 +68,8 @@ public class FakeStoreProductService implements ProductService{
         if(responseEntity.getBody() == null || !responseEntity.hasBody()){
             throw new FakeStoreAPIException("Something went wrong with fake-store api...");
         }
-        return Arrays.stream(responseEntity.getBody()).map(responseRecord->ProductMapper.toProduct(ProductMapper.toProductRecord(responseRecord))).toList();
+        return Arrays.stream(responseEntity.getBody()).
+                map(ProductMapper::toProduct).toList();
     }
 
     @Override
@@ -76,10 +78,10 @@ public class FakeStoreProductService implements ProductService{
         if(requestRecord ==null){
             throw new FakeStoreAPIException("Something went wrong with fake-store api...");
         }
-        return ProductMapper.toProduct(ProductMapper.toProductRecord(requestRecord));
+        return ProductMapper.toProduct(requestRecord);
     }
 
-    @Overrideu
+    @Override
     public void deleteProduct(Long productId) throws FakeStoreAPIException {
         try{
             ResponseEntity<String> response = restTemplate.exchange(

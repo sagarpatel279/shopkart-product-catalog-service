@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity(name = "ratings")
 public class Rating extends BaseModel{
-    private Integer rate;
+    private Double rate;
     @ManyToOne
     private Product product;
     private Long userId;

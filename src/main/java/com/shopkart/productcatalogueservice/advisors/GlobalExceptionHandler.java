@@ -21,14 +21,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneralCheckedException(Exception exp){
         ApiResponse apiResponse=new ApiResponse();
-        apiResponse.setMessage("Something went wrong at server side...Please try again..!");
+        apiResponse.setMessage(exp.getMessage());
         apiResponse.setStatus(ResponseStatus.FAILURE);
         return new ResponseEntity<>(apiResponse,HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleGeneralRuntimeException(RuntimeException exp){
         ApiResponse apiResponse=new ApiResponse();
-        apiResponse.setMessage("Something went wrong with service...!: ");
+        apiResponse.setMessage(exp.getMessage());
         apiResponse.setStatus(ResponseStatus.FAILURE);
         return new ResponseEntity<>(apiResponse,HttpStatus.INTERNAL_SERVER_ERROR);
     }

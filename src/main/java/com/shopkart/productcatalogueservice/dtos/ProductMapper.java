@@ -2,13 +2,11 @@ package com.shopkart.productcatalogueservice.dtos;
 
 import com.shopkart.productcatalogueservice.dtos.records.FakeStoreProductRecord;
 import com.shopkart.productcatalogueservice.dtos.records.ProductRecord;
-import com.shopkart.productcatalogueservice.dtos.records.RatingResponseRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.models.Rating;
 import org.springframework.data.util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductMapper {
@@ -62,15 +60,39 @@ public class ProductMapper {
         product.setCategory(new Category(productRecord.categoryName()));
         return product;
     }
+    public static Product toProduct(FakeStoreProductRecord fakeStoreProductRecord){
+        Product product=new Product();
+        product.setId(fakeStoreProductRecord.id()!=null? fakeStoreProductRecord.id().longValue() :null);
+        product.setName(fakeStoreProductRecord.title());
+        product.setPrice(fakeStoreProductRecord.price()!=null? fakeStoreProductRecord.price().doubleValue():null);
+        product.setDescription(fakeStoreProductRecord.description());
+        product.setImageUrl(fakeStoreProductRecord.image());
+        product.setCategory(new Category(fakeStoreProductRecord.category()));
+        Rating rating=new Rating();
+        rating.setRate(fakeStoreProductRecord.rating().rate());
+        rating.setProduct(product);
+        product.setRatings(List.of(rating));
+        product.setCount(fakeStoreProductRecord.rating().count());
+        return product;
+    }
     public static ProductRecord toProductRecord(Product product){
-        Pair<Double,Integer> pair=getAverageRateAndCount(product.getRatings());
         return new ProductRecord(product.getId(),
                 product.getName(),
                 product.getPrice(),
                 product.getDescription(),
                 product.getCategory()!=null? product.getCategory().getName():null,
                 product.getImageUrl(),
-                new RatingResponseRecord(pair.getFirst(),pair.getSecond()));
+                new ProductRecord.RatingResponseRecord(product.getRatings().getFirst().getRate(),product.getCount()));
+    }
+    public static FakeStoreProductRecord toFakeStoreProductRecord(Product product){
+        return new FakeStoreProductRecord(
+                product.getId()!=null?product.getId().intValue():null,
+                product.getName(),
+                product.getPrice()!=null?product.getPrice().floatValue():null,
+                product.getDescription(),
+                product.getCategory()!=null? product.getCategory().getName():null,
+                product.getImageUrl(),
+                new FakeStoreProductRecord.FakeStoreRatingRecord(product.getRatings().getFirst().getRate(),product.getCount()));
     }
     public static FakeStoreProductRecord toFakeStoreProductRecord(ProductRecord productRecord){
         return new FakeStoreProductRecord(
@@ -80,7 +102,7 @@ public class ProductMapper {
                 productRecord.description(),
                 productRecord.categoryName(),
                 productRecord.imageUrl(),
-                new FakeStoreProductRecord.FakeStoreRatingRecord(productRecord.ratingResponseRecord().rate(), productRecord.ratingResponseRecord().count())
+                new FakeStoreProductRecord.FakeStoreRatingRecord(productRecord.rating().rate(), productRecord.rating().count())
                 );
     }
     public static ProductRecord toProductRecord(FakeStoreProductRecord requestRecord){
@@ -91,15 +113,7 @@ public class ProductMapper {
                 requestRecord.description(),
                 requestRecord.image(),
                 requestRecord.category(),
-                new RatingResponseRecord(requestRecord.ratings().rate(), requestRecord.ratings().count()));
-    }
-    private static Pair<Double,Integer> getAverageRateAndCount(List<Rating> ratings){
-        Double rate=ratings.stream()
-                .mapToInt(Rating::getRate)
-                .average()
-                .orElse(0.0);
-        Integer count=ratings.size();
-        return Pair.of(rate,count);
+                new ProductRecord.RatingResponseRecord(requestRecord.rating().rate(), requestRecord.rating().count()));
     }
 }
 
