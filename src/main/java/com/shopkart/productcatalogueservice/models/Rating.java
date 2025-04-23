@@ -12,5 +12,4 @@ public class Rating extends BaseModel{
     private Double rate;
     @ManyToOne
     private Product product;
-    private Long userId;
 }

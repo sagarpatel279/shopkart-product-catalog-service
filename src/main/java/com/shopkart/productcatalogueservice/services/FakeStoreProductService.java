@@ -7,6 +7,7 @@ import com.shopkart.productcatalogueservice.dtos.records.ProductRecord;
 import com.shopkart.productcatalogueservice.exceptions.FakeStoreAPIException;
 import com.shopkart.productcatalogueservice.models.Product;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Profile("fakestore")
 public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
     private String fakeStoreUrl;
@@ -24,7 +26,7 @@ public class FakeStoreProductService implements ProductService{
         fakeStoreUrl=baseUrl+"/products";
     }
     @Override
-    public Product createProduct(Product product) throws FakeStoreAPIException {
+    public Product createProduct(Product product){
         FakeStoreProductRecord requestRecord= ProductMapper.toFakeStoreProductRecord(product);
         requestRecord= restTemplate.postForObject(fakeStoreUrl,requestRecord,FakeStoreProductRecord.class);
         if(requestRecord==null){

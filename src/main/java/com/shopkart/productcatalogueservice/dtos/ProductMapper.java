@@ -68,25 +68,25 @@ public class ProductMapper {
         product.setDescription(fakeStoreProductRecord.description());
         product.setImageUrl(fakeStoreProductRecord.image());
         product.setCategory(new Category(fakeStoreProductRecord.category()));
-        Rating rating=new Rating();
-        rating.setRate(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.rate():null);
-        rating.setProduct(product);
-        product.setRatings(List.of(rating));
-        product.setCount(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.count():null);
+//        Rating rating=new Rating();
+//        rating.setRate(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.rate():null);
+//        rating.setProduct(product);
+//        product.setRatings(List.of(rating));
+//        product.setCount(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.count():null);
         return product;
     }
     public static ProductRecord toProductRecord(Product product){
-        Double rate=product.getRatings()!=null?product.getRatings().getFirst().getRate():null;
+//        Double rate=product.getRatings()!=null?product.getRatings().getFirst().getRate():null;
         return new ProductRecord(product.getId(),
                 product.getName(),
                 product.getPrice(),
                 product.getDescription(),
                 product.getCategory()!=null? product.getCategory().getName():null,
-                product.getImageUrl(),
-                new ProductRecord.RatingResponseRecord(rate,product.getCount()));
+                product.getImageUrl());
+//                ,new ProductRecord.RatingResponseRecord(rate,product.getCount()));
     }
     public static FakeStoreProductRecord toFakeStoreProductRecord(Product product){
-        Double rate=product.getRatings()!=null?product.getRatings().getFirst().getRate():null;
+//        Double rate=product.getRatings()!=null?product.getRatings().getFirst().getRate():null;
         return new FakeStoreProductRecord(
                 product.getId()!=null?product.getId().intValue():null,
                 product.getName(),
@@ -94,7 +94,7 @@ public class ProductMapper {
                 product.getDescription(),
                 product.getCategory()!=null? product.getCategory().getName():null,
                 product.getImageUrl(),
-                new FakeStoreProductRecord.FakeStoreRatingRecord(rate,product.getCount()));
+                new FakeStoreProductRecord.FakeStoreRatingRecord(null,null));
     }
     public static FakeStoreProductRecord toFakeStoreProductRecord(ProductRecord productRecord){
         return new FakeStoreProductRecord(
@@ -104,7 +104,7 @@ public class ProductMapper {
                 productRecord.description(),
                 productRecord.categoryName(),
                 productRecord.imageUrl(),
-                new FakeStoreProductRecord.FakeStoreRatingRecord(productRecord.rating().rate(), productRecord.rating().count())
+                new FakeStoreProductRecord.FakeStoreRatingRecord(null,null)
                 );
     }
     public static ProductRecord toProductRecord(FakeStoreProductRecord requestRecord){
@@ -115,8 +115,8 @@ public class ProductMapper {
                 requestRecord.price()!=null? requestRecord.price().doubleValue():null,
                 requestRecord.description(),
                 requestRecord.image(),
-                requestRecord.category(),
-                new ProductRecord.RatingResponseRecord(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.rate():null, fakeStoreRatingRecord!=null?fakeStoreRatingRecord.count():null));
+                requestRecord.category());
+//                ,new ProductRecord.RatingResponseRecord(fakeStoreRatingRecord!=null?fakeStoreRatingRecord.rate():null, fakeStoreRatingRecord!=null?fakeStoreRatingRecord.count():null));
     }
 }
 

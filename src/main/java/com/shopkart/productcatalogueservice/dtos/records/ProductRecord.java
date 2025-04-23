@@ -17,8 +17,8 @@ public record ProductRecord(
         @NotBlank(groups = OnCreate.class,message = "Category name must be required to create a Product")
         String categoryName,
         @NotBlank(groups = OnCreate.class,message = "Image URL must be provided to create a Product")
-        String imageUrl,
-        RatingResponseRecord rating) {
+        String imageUrl){
+//        ,RatingResponseRecord rating) {
 
-        public static record RatingResponseRecord(Double rate,Integer count){}
+//        public static record RatingResponseRecord(Double rate,Integer count){}
 }

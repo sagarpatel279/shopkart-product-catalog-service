@@ -1,9 +1,6 @@
 package com.shopkart.productcatalogueservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,10 +14,11 @@ public class Product extends BaseModel{
     private Double price;
     private String description;
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
     private String imageUrl;
-    @OneToMany(mappedBy = "product")
-    private List<Rating> ratings;
-    @Transient
-    private Integer count;
+//    @OneToMany(mappedBy = "product")
+//    private List<Rating> ratings;
+//    @Transient
+//    private Integer count;
 }

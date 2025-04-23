@@ -6,10 +6,10 @@ import com.shopkart.productcatalogueservice.models.Product;
 import java.util.List;
 
 public interface ProductService {
-    Product createProduct(Product product) throws FakeStoreAPIException;
-    Product updateProduct(Long ProductId, Product product) throws FakeStoreAPIException;
-    Product replaceProduct(Long ProductId, Product product) throws FakeStoreAPIException;
-    List<Product> getAllProducts() throws FakeStoreAPIException;
-    Product getProduct(Long productId) throws FakeStoreAPIException;
-    void deleteProduct(Long productId) throws FakeStoreAPIException;
+    Product createProduct(Product product);
+    Product updateProduct(Long ProductId, Product product);
+    Product replaceProduct(Long ProductId, Product product);
+    List<Product> getAllProducts();
+    Product getProduct(Long productId);
+    void deleteProduct(Long productId);
 }

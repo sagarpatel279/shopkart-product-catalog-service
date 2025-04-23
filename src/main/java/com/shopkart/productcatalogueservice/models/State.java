@@ -1,5 +1,5 @@
 package com.shopkart.productcatalogueservice.models;
 
 public enum State {
-    ACTIVE, INACTIVE
+    ACTIVE, INACTIVE,DELETED
 }
