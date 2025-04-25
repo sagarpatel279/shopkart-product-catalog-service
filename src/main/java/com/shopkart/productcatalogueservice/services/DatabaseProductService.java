@@ -29,7 +29,7 @@ public class DatabaseProductService implements ProductService{
     @Override
     public Product createProduct(Product product) {
         Category category=createOrUpdateAsPerCategoryExist(product.getCategory());
-        boolean exist=productRepository.existsByProductNameAndCategory_Name(product.getName(),category.getName());
+        boolean exist=productRepository.existsByNameAndCategory_Name(product.getName(),category.getName());
         if(exist){
             throw new ProductExistWithCategoryException("Product already exists in given category");
         }
@@ -42,7 +42,7 @@ public class DatabaseProductService implements ProductService{
     }
     @Override
     public Product updateProduct(Long productId, Product product) {
-        Product productFromDb = productRepository.findByproductId(productId)
+        Product productFromDb = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product could not be found by given product Id"));
         if(productFromDb.getState()!=State.ACTIVE)
             throw new ProductNotFoundException("Product doesn't exist");
@@ -64,7 +64,7 @@ public class DatabaseProductService implements ProductService{
 
     @Override
     public Product replaceProduct(Long productId, Product product) {
-        Product productFromDb = productRepository.findByproductId(productId)
+        Product productFromDb = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product could not be found by given product Id"));
         if(productFromDb.getState()!=State.ACTIVE)
             throw new ProductNotFoundException("Product doesn't exist");
@@ -78,12 +78,12 @@ public class DatabaseProductService implements ProductService{
 
     @Override
     public List<Product> getAllProducts() {
-        return productRepository.findAllByProductState(State.ACTIVE);
+        return productRepository.findAllByState(State.ACTIVE);
     }
 
     @Override
     public Product getProduct(Long productId) {
-        Product productFromDb =productRepository.findByproductId(productId)
+        Product productFromDb =productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product could not be found by given product Id"));
         if(productFromDb.getState()!=State.ACTIVE)
             throw new ProductNotFoundException("Product doesn't exist");
@@ -92,7 +92,7 @@ public class DatabaseProductService implements ProductService{
 
     @Override
     public void deleteProduct(Long productId) {
-        Product productFromDb = productRepository.findByproductId(productId)
+        Product productFromDb = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product could not be found by given product Id"));
         if(productFromDb.getState()!=State.ACTIVE)
             throw new ProductNotFoundException("Product doesn't exist");

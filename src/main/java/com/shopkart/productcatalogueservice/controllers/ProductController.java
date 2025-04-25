@@ -44,6 +44,7 @@ public class ProductController {
     }
 
     @PostMapping("")
+//    @CrossOrigin(origins = "*")
     public ResponseEntity<?> createProduct(@RequestBody @Validated(OnCreate.class) ProductRecord requestRecord){
         ApiResponse<ProductRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductRecord(productService.createProduct(ProductMapper.toProduct(requestRecord))),
                 "New Product is created successfully",HttpStatus.CREATED.value());

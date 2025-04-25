@@ -22,3 +22,4 @@ public record ProductRecord(
 
 //        public static record RatingResponseRecord(Double rate,Integer count){}
 }
+//
