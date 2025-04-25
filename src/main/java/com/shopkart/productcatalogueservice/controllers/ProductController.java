@@ -59,7 +59,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> replaceProduct(@PathVariable("id") @NotNull(message = "ID must be required to delete")
-                                                @Positive(message = "ID must be greater than 0") Long id,@RequestBody @Validated(OnReplace.class) ProductRecord requestRecord){
+                                                @Positive(message = "ID must be greater than 0") Long id,
+                                            @RequestBody @Validated(OnReplace.class) ProductRecord requestRecord){
         ApiResponse<ProductRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductRecord(productService.replaceProduct(id,ProductMapper.toProduct(requestRecord))),"Product has been replaced successfully",HttpStatus.CREATED.value());
         return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
