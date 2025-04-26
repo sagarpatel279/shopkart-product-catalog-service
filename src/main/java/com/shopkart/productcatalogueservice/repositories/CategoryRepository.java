@@ -12,7 +12,16 @@ import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category,Long> {
-    Optional<Category> findByName(String name);
+    Optional<Category> findByNameAndState(String name,State state);
     @Query("SELECT c from categories  c where c.state=:state")
     List<Category> findAllByState(@Param("state") State state);
+
+
+    boolean existsByNameAndState(String category, State state);
+
+    boolean existByNameAndState(String name, State state);
+
+    boolean existsByIdAndState(Long categoryId, State state);
+
+    Optional<Category> findByIdAndState(Long categoryId, State state);
 }

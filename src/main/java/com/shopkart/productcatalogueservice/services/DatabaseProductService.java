@@ -1,5 +1,6 @@
 package com.shopkart.productcatalogueservice.services;
 
+import com.shopkart.productcatalogueservice.exceptions.CategoryNotFoundException;
 import com.shopkart.productcatalogueservice.exceptions.ProductExistWithCategoryException;
 import com.shopkart.productcatalogueservice.exceptions.ProductNotFoundException;
 import com.shopkart.productcatalogueservice.models.Category;
@@ -29,7 +30,7 @@ public class DatabaseProductService implements ProductService{
     @Override
     public Product createProduct(Product product) {
         Category category=createOrUpdateAsPerCategoryExist(product.getCategory());
-        boolean exist=productRepository.existsByNameAndCategory_Name(product.getName(),category.getName());
+        boolean exist=productRepository.existsByNameAndStateAndCategory_NameAndCategory_State(product.getName(),State.ACTIVE,category.getName(),State.ACTIVE);
         if(exist){
             throw new ProductExistWithCategoryException("Product already exists in given category");
         }
@@ -37,15 +38,13 @@ public class DatabaseProductService implements ProductService{
         return productRepository.save(product);
     }
     private Category createOrUpdateAsPerCategoryExist(Category category){
-        Optional<Category> categoryOptional=categoryRepository.findByName(category.getName());
+        Optional<Category> categoryOptional=categoryRepository.findByNameAndState(category.getName(),State.ACTIVE);
         return categoryOptional.orElseGet(() -> categoryRepository.save(category));
     }
     @Override
     public Product updateProduct(Long productId, Product product) {
-        Product productFromDb = productRepository.findById(productId)
+        Product productFromDb = productRepository.findByIdAndState(productId,State.ACTIVE)
                 .orElseThrow(() -> new ProductNotFoundException("Product could not be found by given product Id"));
-        if(productFromDb.getState()!=State.ACTIVE)
-            throw new ProductNotFoundException("Product doesn't exist");
 
         if(product.getName()!=null && !product.getName().isBlank())
             productFromDb.setName(product.getName());
@@ -64,10 +63,8 @@ public class DatabaseProductService implements ProductService{
 
     @Override
     public Product replaceProduct(Long productId, Product product) {
-        Product productFromDb = productRepository.findById(productId)
+        Product productFromDb = productRepository.findByIdAndState(productId,State.ACTIVE)
                 .orElseThrow(() -> new ProductNotFoundException("Product could not be found by given product Id"));
-        if(productFromDb.getState()!=State.ACTIVE)
-            throw new ProductNotFoundException("Product doesn't exist");
         productFromDb.setName(product.getName());
         productFromDb.setDescription(product.getDescription());
         productFromDb.setImageUrl(product.getImageUrl());
@@ -83,21 +80,33 @@ public class DatabaseProductService implements ProductService{
 
     @Override
     public Product getProduct(Long productId) {
-        Product productFromDb =productRepository.findById(productId)
+        return productRepository.findByIdAndState(productId,State.ACTIVE)
                 .orElseThrow(() -> new ProductNotFoundException("Product could not be found by given product Id"));
-        if(productFromDb.getState()!=State.ACTIVE)
-            throw new ProductNotFoundException("Product doesn't exist");
-        return productFromDb;
     }
 
     @Override
     public void deleteProduct(Long productId) {
-        Product productFromDb = productRepository.findById(productId)
+        Product productFromDb = productRepository.findByIdAndState(productId,State.ACTIVE)
                 .orElseThrow(() -> new ProductNotFoundException("Product could not be found by given product Id"));
-        if(productFromDb.getState()!=State.ACTIVE)
-            throw new ProductNotFoundException("Product doesn't exist");
 
         productFromDb.setState(State.DELETED);
+        productFromDb.setUpdatedAt(new Date());
         productRepository.save(productFromDb);
+    }
+
+    @Override
+    public List<Product> getAllProductsByCategory(String category) {
+        category=slugToCategoryName(category);
+        boolean categoryExist=categoryRepository.existsByNameAndState(category,State.ACTIVE);
+        if(!categoryExist)
+            throw new CategoryNotFoundException("Category could not be found by given category name");
+        return productRepository.findAllByStateAndCategory_Name(State.ACTIVE,category);
+    }
+
+    private String slugToCategoryName(String slug){
+        if(slug == null || slug.isBlank()){
+            throw new IllegalArgumentException("Category slug can not be null or empty");
+        }
+        return slug.replace("-"," ");
     }
 }

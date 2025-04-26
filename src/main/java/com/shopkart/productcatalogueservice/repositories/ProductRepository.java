@@ -8,10 +8,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
-    boolean existsByNameAndCategory_Name(String name, String categoryName);
     @Query("SELECT p FROM products p JOIN FETCH p.category where p.state=:state")
     List<Product> findAllByState(@Param("state") State state);
+
+    @Query("SELECT p FROM products p JOIN FETCH p.category where p.state=:state and p.category.name=:category")
+    List<Product> findAllByStateAndCategory_Name(@Param("state")State state,@Param("category") String category);
+
+
+    boolean existsByNameAndStateAndCategory_NameAndCategory_State(String name, State state, String category, State categoryState);
+
+    Optional<Product> findByIdAndState(Long productId, State state);
+
+    boolean existByCategory_IdAndState(Long categoryId, State state);
 }
