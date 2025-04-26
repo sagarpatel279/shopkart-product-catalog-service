@@ -1,8 +1,7 @@
 package com.shopkart.productcatalogueservice.services;
 
-import ch.qos.logback.classic.spi.IThrowableProxy;
 import com.shopkart.productcatalogueservice.exceptions.CategoryAlreadyExistException;
-import com.shopkart.productcatalogueservice.exceptions.CategoryDeletionException;
+import com.shopkart.productcatalogueservice.exceptions.CategoryOnDeleteException;
 import com.shopkart.productcatalogueservice.exceptions.CategoryNotFoundException;
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.State;
@@ -29,7 +28,7 @@ public class DatabaseCategoryService implements CategoryService{
     }
     @Override
     public Category createCategory(Category category) {
-        boolean categoryExist=categoryRepository.existByNameAndState(category.getName(),State.ACTIVE);
+        boolean categoryExist=categoryRepository.existsByNameAndState(category.getName(),State.ACTIVE);
         if(categoryExist)
             throw new CategoryAlreadyExistException("Category is already exist with given name");
         return categoryRepository.save(category);
@@ -77,9 +76,9 @@ public class DatabaseCategoryService implements CategoryService{
     public void deleteCategory(Long categoryId) {
         Category category=categoryRepository.findByIdAndState(categoryId,State.ACTIVE)
                 .orElseThrow(()-> new CategoryNotFoundException("Category could not be found by given Id"));
-        boolean productsByCategoryExist=productRepository.existByCategory_IdAndState(categoryId,State.ACTIVE);
+        boolean productsByCategoryExist=productRepository.existsByCategory_IdAndState(categoryId,State.ACTIVE);
         if(productsByCategoryExist)
-            throw new CategoryDeletionException("Category could not be deleted because products associated with category are exist");
+            throw new CategoryOnDeleteException("Category could not be deleted because products associated with category are exist");
         category.setState(State.DELETED);
         category.setUpdatedAt(new Date());
         categoryRepository.save(category);

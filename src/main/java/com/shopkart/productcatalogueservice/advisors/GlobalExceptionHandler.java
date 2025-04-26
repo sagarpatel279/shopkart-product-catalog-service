@@ -1,8 +1,6 @@
 package com.shopkart.productcatalogueservice.advisors;
 
-import com.shopkart.productcatalogueservice.exceptions.FakeStoreAPIException;
-import com.shopkart.productcatalogueservice.exceptions.ProductExistWithCategoryException;
-import com.shopkart.productcatalogueservice.exceptions.ProductNotFoundException;
+import com.shopkart.productcatalogueservice.exceptions.*;
 import jakarta.el.MethodNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +52,28 @@ public class GlobalExceptionHandler {
         errorResponse.put("status",HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(CategoryAlreadyExistException.class)
+    public ResponseEntity<?> handleCategoryAlreadyExistException(CategoryAlreadyExistException exp){
+        Map<String,Object> errorResponse=new HashMap<>();
+        errorResponse.put("message",exp.getMessage());
+        errorResponse.put("status",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(CategoryOnDeleteException.class)
+    public ResponseEntity<?> handleCategoryOnDeletionException(CategoryOnDeleteException exp){
+        Map<String,Object> errorResponse=new HashMap<>();
+        errorResponse.put("message",exp.getMessage());
+        errorResponse.put("status",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<?> handleCategoryNotFoundException(CategoryNotFoundException exp){
+        Map<String,Object> errorResponse=new HashMap<>();
+        errorResponse.put("message",exp.getMessage());
+        errorResponse.put("status",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleInvalidFormat(HttpMessageNotReadableException ex) {
         return ResponseEntity.badRequest().body(
@@ -85,4 +105,5 @@ public class GlobalExceptionHandler {
         error.put("path", ex.getRequestURL());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+
 }

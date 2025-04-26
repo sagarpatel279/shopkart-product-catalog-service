@@ -18,10 +18,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("SELECT p FROM products p JOIN FETCH p.category where p.state=:state and p.category.name=:category")
     List<Product> findAllByStateAndCategory_Name(@Param("state")State state,@Param("category") String category);
 
-
     boolean existsByNameAndStateAndCategory_NameAndCategory_State(String name, State state, String category, State categoryState);
 
     Optional<Product> findByIdAndState(Long productId, State state);
 
-    boolean existByCategory_IdAndState(Long categoryId, State state);
+    boolean existsByCategory_IdAndState(Long categoryId, State state);
 }
