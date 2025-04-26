@@ -4,6 +4,7 @@ import com.shopkart.productcatalogueservice.dtos.ProductMapper;
 import com.shopkart.productcatalogueservice.exceptions.FakeStoreAPIException;
 import com.shopkart.productcatalogueservice.dtos.records.ApiResponse;
 import com.shopkart.productcatalogueservice.dtos.records.ProductRecord;
+import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.shopkart.productcatalogueservice.validations.groups.OnCreate;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("${shopkart.api.product-path}")
 public class ProductController {
     private final ProductService productService;
 
@@ -31,7 +32,11 @@ public class ProductController {
     }
     @GetMapping("")
     public ResponseEntity<?> getAllProducts(){
-        ApiResponse<List<ProductRecord>> apiResponse =new ApiResponse<>(productService.getAllProducts().stream().map(ProductMapper::toProductRecord).toList(),"Successfully data fetched",HttpStatus.OK.value());
+        List<Product> products=productService.getAllProducts();
+        if(products.isEmpty()){
+            return ResponseEntity.ok("No Products are there...");
+        }
+        ApiResponse<List<ProductRecord>> apiResponse =new ApiResponse<>(products.stream().map(ProductMapper::toProductRecord).toList(),"Successfully data fetched",HttpStatus.OK.value());
         return ResponseEntity.ok(apiResponse);
     }
 

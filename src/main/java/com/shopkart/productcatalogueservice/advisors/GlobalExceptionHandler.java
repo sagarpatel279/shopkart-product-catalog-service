@@ -1,13 +1,16 @@
 package com.shopkart.productcatalogueservice.advisors;
 
-import com.shopkart.productcatalogueservice.dtos.records.ApiResponse;
 import com.shopkart.productcatalogueservice.exceptions.FakeStoreAPIException;
+import com.shopkart.productcatalogueservice.exceptions.ProductExistWithCategoryException;
+import com.shopkart.productcatalogueservice.exceptions.ProductNotFoundException;
+import jakarta.el.MethodNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +40,20 @@ public class GlobalExceptionHandler {
         errorResponse.put("status",HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<?> handleProductNotFoundException(ProductNotFoundException exp){
+        Map<String,Object> errorResponse=new HashMap<>();
+        errorResponse.put("message",exp.getMessage());
+        errorResponse.put("status",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ProductExistWithCategoryException.class)
+    public ResponseEntity<?> handleProductExistWithCategoryException(ProductExistWithCategoryException exp){
+        Map<String,Object> errorResponse=new HashMap<>();
+        errorResponse.put("message",exp.getMessage());
+        errorResponse.put("status",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleInvalidFormat(HttpMessageNotReadableException ex) {
         return ResponseEntity.badRequest().body(
@@ -54,5 +71,18 @@ public class GlobalExceptionHandler {
         });
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
+    @ExceptionHandler(MethodNotFoundException.class)
+    public ResponseEntity<?> handleMethodValidationExceptions(MethodNotFoundException exp){
+            Map<String,Object> errorResponse=new HashMap<>();
+            errorResponse.put("message",exp.getMessage());
+            errorResponse.put("status",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "API not found");
+        error.put("path", ex.getRequestURL());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }
