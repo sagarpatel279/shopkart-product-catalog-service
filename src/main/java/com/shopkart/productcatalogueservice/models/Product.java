@@ -17,8 +17,6 @@ public class Product extends BaseModel{
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
     private String imageUrl;
-//    @OneToMany(mappedBy = "product")
-//    private List<Rating> ratings;
-//    @Transient
-//    private Integer count;
+    @OneToMany(mappedBy = "product")
+    private List<Rating> ratings;
 }

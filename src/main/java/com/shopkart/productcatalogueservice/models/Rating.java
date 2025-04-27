@@ -10,6 +10,7 @@ import lombok.Setter;
 @Entity(name = "ratings")
 public class Rating extends BaseModel{
     private Double rate;
+    private String review;
     @ManyToOne
     private Product product;
 }

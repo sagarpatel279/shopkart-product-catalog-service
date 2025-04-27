@@ -1,9 +1,9 @@
 package com.shopkart.productcatalogueservice.controllers;
 
 import com.shopkart.productcatalogueservice.dtos.ProductMapper;
-import com.shopkart.productcatalogueservice.exceptions.FakeStoreAPIException;
 import com.shopkart.productcatalogueservice.dtos.records.ApiResponse;
-import com.shopkart.productcatalogueservice.dtos.records.ProductRecord;
+import com.shopkart.productcatalogueservice.dtos.records.ProductRequestRecord;
+import com.shopkart.productcatalogueservice.dtos.records.ProductResponseRecord;
 import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.services.ProductService;
 import jakarta.validation.constraints.NotBlank;
@@ -37,34 +37,34 @@ public class ProductController {
         if(products.isEmpty()){
             return ResponseEntity.ok("No records");
         }
-        ApiResponse<List<ProductRecord>> apiResponse =new ApiResponse<>(products.stream().map(ProductMapper::toProductRecord).toList(),"Successfully data fetched",HttpStatus.OK.value());
+        ApiResponse<List<ProductResponseRecord>> apiResponse =new ApiResponse<>(products.stream().map(ProductMapper::toProductResponseRecord).toList(),"Successfully data fetched",HttpStatus.OK.value());
         return ResponseEntity.ok(apiResponse);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProduct(@PathVariable("id")@NotNull(message = "ID must be required to delete")@Positive(message = "ID must be greater than 0") Long id){
-        ApiResponse<ProductRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductRecord(productService.getProduct(id)),
+        ApiResponse<ProductResponseRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductResponseRecord(productService.getProduct(id)),
                 "Successfully data fetched",HttpStatus.OK.value());
         return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping("")
 //    @CrossOrigin(origins = "*")
-    public ResponseEntity<?> createProduct(@RequestBody @Validated(OnCreate.class) ProductRecord requestRecord){
-        ApiResponse<ProductRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductRecord(productService.createProduct(ProductMapper.toProduct(requestRecord))),
+    public ResponseEntity<?> createProduct(@RequestBody @Validated(OnCreate.class) ProductRequestRecord requestRecord){
+        ApiResponse<ProductResponseRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductResponseRecord(productService.createProduct(ProductMapper.toProduct(requestRecord))),
                 "New Product is created successfully",HttpStatus.CREATED.value());
         return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") @NotNull(message = "ID must be required to delete")@Positive(message = "ID must be greater than 0") Long id,@RequestBody @Validated(OnUpdate.class) ProductRecord requestRecord){
-        ApiResponse<ProductRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductRecord(productService.updateProduct(id,ProductMapper.toProduct(requestRecord))),"Product has been updated successfully",HttpStatus.CREATED.value());
+    public ResponseEntity<?> updateProduct(@PathVariable("id") @NotNull(message = "ID must be required to delete")@Positive(message = "ID must be greater than 0") Long id,@RequestBody @Validated(OnUpdate.class) ProductRequestRecord requestRecord){
+        ApiResponse<ProductResponseRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductResponseRecord(productService.updateProduct(id,ProductMapper.toProduct(requestRecord))),"Product has been updated successfully",HttpStatus.CREATED.value());
         return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> replaceProduct(@PathVariable("id") @NotNull(message = "ID must be required to delete")@Positive(message = "ID must be greater than 0") Long id,@RequestBody @Validated(OnReplace.class) ProductRecord requestRecord){
-        ApiResponse<ProductRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductRecord(productService.replaceProduct(id,ProductMapper.toProduct(requestRecord))),"Product has been replaced successfully",HttpStatus.CREATED.value());
+    public ResponseEntity<?> replaceProduct(@PathVariable("id") @NotNull(message = "ID must be required to delete")@Positive(message = "ID must be greater than 0") Long id,@RequestBody @Validated(OnReplace.class) ProductRequestRecord requestRecord){
+        ApiResponse<ProductResponseRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductResponseRecord(productService.replaceProduct(id,ProductMapper.toProduct(requestRecord))),"Product has been replaced successfully",HttpStatus.CREATED.value());
         return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
 
@@ -82,7 +82,7 @@ public class ProductController {
         List<Product> products=productService.getAllProductsByCategory(category);
         if(products.isEmpty())
             return ResponseEntity.ok("No records");
-        ApiResponse<List<ProductRecord>> apiResponse=new ApiResponse<>(products.stream().map(ProductMapper::toProductRecord).toList(),"Data have been fetched successfully.",HttpStatus.OK.value());
+        ApiResponse<List<ProductResponseRecord>> apiResponse=new ApiResponse<>(products.stream().map(ProductMapper::toProductResponseRecord).toList(),"Data have been fetched successfully.",HttpStatus.OK.value());
         return ResponseEntity.ok(apiResponse);
     }
 }

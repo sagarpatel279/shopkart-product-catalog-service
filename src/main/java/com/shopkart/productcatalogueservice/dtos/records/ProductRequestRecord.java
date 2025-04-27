@@ -3,7 +3,7 @@ package com.shopkart.productcatalogueservice.dtos.records;
 import com.shopkart.productcatalogueservice.validations.groups.*;
 import jakarta.validation.constraints.*;
 
-public record ProductRecord(
+public record ProductRequestRecord(
         @Null(groups = {OnUpdate.class, OnReplace.class, OnCreate.class},message = "ID must be null to apply CRUD on Product")
         Long id,
         @NotBlank(groups = {OnCreate.class,OnReplace.class},message = "Name must be required to create or replace a Product")
