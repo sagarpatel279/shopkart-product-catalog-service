@@ -6,7 +6,6 @@ import com.shopkart.productcatalogueservice.exceptions.CategoryNotFoundException
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.State;
 import com.shopkart.productcatalogueservice.repositories.CategoryRepository;
-import com.shopkart.productcatalogueservice.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -19,12 +18,10 @@ import java.util.Optional;
 @Profile("database")
 public class DatabaseCategoryService implements CategoryService{
     private CategoryRepository categoryRepository;
-    private ProductRepository productRepository;
 
     @Autowired
-    public DatabaseCategoryService(CategoryRepository categoryRepository,ProductRepository productRepository){
+    public DatabaseCategoryService(CategoryRepository categoryRepository){
         this.categoryRepository=categoryRepository;
-        this.productRepository=productRepository;
     }
     @Override
     public Category createCategory(Category category) {
@@ -76,9 +73,9 @@ public class DatabaseCategoryService implements CategoryService{
     public void deleteCategory(Long categoryId) {
         Category category=categoryRepository.findByIdAndState(categoryId,State.ACTIVE)
                 .orElseThrow(()-> new CategoryNotFoundException("Category could not be found by given Id"));
-        boolean productsByCategoryExist=productRepository.existsByCategory_IdAndState(categoryId,State.ACTIVE);
+        boolean productsByCategoryExist=categoryRepository.existsCategoryReferenceInNotDeletedChildEntity(categoryId,State.DELETED);
         if(productsByCategoryExist)
-            throw new CategoryOnDeleteException("Category could not be deleted because products associated with category are exist");
+            throw new CategoryOnDeleteException("Category could not be deleted because products associated with category are exists");
         category.setState(State.DELETED);
         category.setUpdatedAt(new Date());
         categoryRepository.save(category);

@@ -26,6 +26,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @EntityGraph(attributePaths = {"category","ratings"})
     Optional<Product> findByIdAndState(Long productId, State state);
 
-    @EntityGraph(attributePaths = {"category","ratings"})
-    boolean existsByCategory_IdAndState(Long categoryId, State state);
+//    @EntityGraph(attributePaths = {"category","ratings"})
+//    boolean existsByCategory_IdAndState(Long categoryId, State state);
 }
