@@ -99,7 +99,7 @@ public class DatabaseProductService implements ProductService{
         category=slugToCategoryName(category);
         boolean categoryExist=categoryRepository.existsByNameAndState(category,State.ACTIVE);
         if(!categoryExist)
-            throw new CategoryNotFoundException("Category could not be found by given category name");
+            throw new CategoryNotFoundException("Category could not be found by given category categoryName");
         return productRepository.findAllByStateAndCategory_Name(State.ACTIVE,category);
     }
 

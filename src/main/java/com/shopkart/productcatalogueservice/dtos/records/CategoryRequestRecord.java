@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import org.hibernate.annotations.OnDelete;
 
-public record CategoryRecord(
+public record CategoryRequestRecord(
         @Null(groups = {OnCreate.class, OnUpdate.class, OnDelete.class},message = "ID must be null")
         Long id,
         @NotNull(groups = {OnCreate.class, OnUpdate.class},message = "Name must be required to create or update category")
-        String name,
+        String categoryName,
         String description) {
 }

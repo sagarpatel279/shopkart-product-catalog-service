@@ -16,7 +16,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @EntityGraph(attributePaths = {"category","ratings"})
     List<Product> findAllByState(State state);
 
-//    @Query("SELECT p FROM products p JOIN FETCH p.category where p.state=:state and p.category.name=:category")
+//    @Query("SELECT p FROM products p JOIN FETCH p.category where p.state=:state and p.category.categoryName=:category")
     @EntityGraph(attributePaths = {"category","ratings"})
     List<Product> findAllByStateAndCategory_Name(State state,String category);
 

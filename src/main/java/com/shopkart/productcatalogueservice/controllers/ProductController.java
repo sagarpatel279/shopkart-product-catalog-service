@@ -43,7 +43,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProduct(@PathVariable("id")@NotNull(message = "ID must be required to delete")@Positive(message = "ID must be greater than 0") Long id){
-        ApiResponse<ProductResponseRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductResponseRecord(productService.getProduct(id)),
+        ApiResponse<ProductResponseRecord> apiResponse =new ApiResponse<>(ProductMapper.toProductWithRatingResponseRecord(productService.getProduct(id)),
                 "Successfully data fetched",HttpStatus.OK.value());
         return ResponseEntity.ok(apiResponse);
     }
@@ -78,7 +78,7 @@ public class ProductController {
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<?> getAllProductsByCategory(@PathVariable("category")@NotBlank(message = "Category name must be required")@NotNull(message = "Category name must be required") String category){
+    public ResponseEntity<?> getAllProductsByCategory(@PathVariable("category")@NotBlank(message = "Category categoryName must be required")@NotNull(message = "Category categoryName must be required") String category){
         List<Product> products=productService.getAllProductsByCategory(category);
         if(products.isEmpty())
             return ResponseEntity.ok("No records");

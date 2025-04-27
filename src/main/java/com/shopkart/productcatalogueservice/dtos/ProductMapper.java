@@ -1,6 +1,7 @@
 package com.shopkart.productcatalogueservice.dtos;
 
 import com.shopkart.productcatalogueservice.dtos.records.FakeStoreProductRecord;
+import com.shopkart.productcatalogueservice.dtos.records.ProductRatingRecord;
 import com.shopkart.productcatalogueservice.dtos.records.ProductRequestRecord;
 import com.shopkart.productcatalogueservice.dtos.records.ProductResponseRecord;
 import com.shopkart.productcatalogueservice.models.Category;
@@ -123,6 +124,10 @@ public class ProductMapper {
 
     public static ProductResponseRecord toProductResponseRecord(Product product){
         String categoryName=product.getCategory()!=null?product.getCategory().getName():null;
+        return new ProductResponseRecord(product.getId(), product.getName(), product.getPrice(), product.getDescription(), categoryName, product.getImageUrl(),null);
+    }
+    public static ProductResponseRecord toProductWithRatingResponseRecord(Product product){
+        String categoryName=product.getCategory()!=null?product.getCategory().getName():null;
         List<Rating> ratings=product.getRatings();
         Double rate=null;
         Integer count=null;
@@ -130,7 +135,7 @@ public class ProductMapper {
             rate=ratings.stream().filter(Objects::nonNull).mapToDouble(Rating::getRate).average().orElse(0.0);
             count=ratings.size();
         }
-        return new ProductResponseRecord(product.getId(), product.getName(), product.getPrice(), product.getDescription(), categoryName, product.getImageUrl(), new ProductResponseRecord.ProductRatingRecord(rate,count));
+        return new ProductResponseRecord(product.getId(), product.getName(), product.getPrice(), product.getDescription(), categoryName, product.getImageUrl(), new ProductRatingRecord(rate,count));
     }
 }
 

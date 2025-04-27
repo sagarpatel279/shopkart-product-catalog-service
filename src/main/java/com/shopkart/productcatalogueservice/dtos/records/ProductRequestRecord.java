@@ -12,9 +12,9 @@ public record ProductRequestRecord(
         @DecimalMin(groups = {OnCreate.class, OnUpdate.class, OnReplace.class},value = "0.0", inclusive = false,message="Price must be greater than 0")
         @DecimalMax(groups = {OnCreate.class, OnUpdate.class, OnReplace.class},value = "1.7976931348623157E308", message="Price is incorrect")
         Double price,
-        @NotBlank(groups = {OnCreate.class,OnReplace.class},message = "Category name must be required to create or replace a Product")
+        @NotBlank(groups = {OnCreate.class,OnReplace.class},message = "Category categoryName must be required to create or replace a Product")
         String description,
-        @NotBlank(groups = {OnCreate.class,OnReplace.class},message = "Category name must be required to create  or replace a Product")
+        @NotBlank(groups = {OnCreate.class,OnReplace.class},message = "Category categoryName must be required to create  or replace a Product")
         String categoryName,
         @NotBlank(groups = {OnCreate.class,OnReplace.class},message = "Image URL must be provided to create  or replace a Product")
         String imageUrl){

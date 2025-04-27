@@ -30,7 +30,7 @@ public class DatabaseCategoryService implements CategoryService{
     public Category createCategory(Category category) {
         boolean categoryExist=categoryRepository.existsByNameAndState(category.getName(),State.ACTIVE);
         if(categoryExist)
-            throw new CategoryAlreadyExistException("Category is already exist with given name");
+            throw new CategoryAlreadyExistException("Category is already exist with given categoryName");
         return categoryRepository.save(category);
     }
 
