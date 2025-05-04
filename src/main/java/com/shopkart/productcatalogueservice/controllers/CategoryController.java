@@ -30,46 +30,113 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService){
         this.categoryService=categoryService;
     }
+
+
     @GetMapping("")
-    public ResponseEntity<?> getAllCategories(){
-        List<Category> categories=categoryService.getAllCategory();
-        if(categories.isEmpty())
-            return ResponseEntity.ok("No Category found..");
-        ApiResponse<List<CategoryResponseRecord>> apiResponse=new ApiResponse<>(categories.stream().map(CategoryMapper::toCategoryResponseRecord).toList(),"All Categories have been fetched", HttpStatus.OK.value());
+    public ResponseEntity<ApiResponse<List<CategoryResponseRecord>>> getAllCategories() {
+        List<Category> categories = categoryService.getAllCategory();
+
+        List<CategoryResponseRecord> responseRecords = categories.stream()
+                .map(CategoryMapper::toCategoryResponseRecord)
+                .toList();
+
+        ApiResponse<List<CategoryResponseRecord>> apiResponse = new ApiResponse<>(
+                responseRecords,
+                categories.isEmpty() ? "No categories found." : "All categories have been fetched.",
+                HttpStatus.OK.value()
+        );
+
         return ResponseEntity.ok(apiResponse);
     }
+
     @GetMapping("{id}")
-    public ResponseEntity<?> getCategory(@NotNull(message = "ID must not be null")@Positive(message = "ID must be greater than zero") @PathVariable("id") Long id){
-        ApiResponse<CategoryResponseRecord> apiResponse=new ApiResponse<>(CategoryMapper.toCategoryAndCategoryProductsResponseRecord(categoryService.getCategory(id)),"Data have been fetched successfully",HttpStatus.OK.value());
+    public ResponseEntity<ApiResponse<CategoryResponseRecord>> getCategory(
+            @PathVariable("id")
+            @NotNull(message = "ID must not be null")
+            @Positive(message = "ID must be greater than zero") Long id) {
+
+        Category category = categoryService.getCategory(id);
+        CategoryResponseRecord responseRecord = CategoryMapper.toCategoryAndCategoryProductsResponseRecord(category);
+
+        ApiResponse<CategoryResponseRecord> apiResponse = new ApiResponse<>(
+                responseRecord,
+                "Data has been fetched successfully",
+                HttpStatus.OK.value()
+        );
+
         return ResponseEntity.ok(apiResponse);
     }
+
     @PostMapping("")
-    public ResponseEntity<?> createCategory(@Validated(OnCreate.class) @RequestBody CategoryRequestRecord categoryRecord){
-        Category category=categoryService.createCategory(CategoryMapper.toCategory(categoryRecord));
-        ApiResponse<CategoryResponseRecord> apiResponse=new ApiResponse<>(CategoryMapper.toCategoryResponseRecord(category),"Category has been created successfully",HttpStatus.CREATED.value());
-        return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<CategoryResponseRecord>> createCategory(
+            @Validated(OnCreate.class)
+            @RequestBody CategoryRequestRecord categoryRecord) {
+
+        Category category = categoryService.createCategory(CategoryMapper.toCategory(categoryRecord));
+
+        ApiResponse<CategoryResponseRecord> apiResponse = new ApiResponse<>(
+                CategoryMapper.toCategoryResponseRecord(category),
+                "Category has been created successfully",
+                HttpStatus.CREATED.value()
+        );
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
+
 
     @PatchMapping("{id}")
-    public ResponseEntity<?> updateCategory(@NotNull(message = "ID must not be null")@Positive(message = "ID must be greater than zero")@PathVariable("id") Long id,@Validated(OnUpdate.class)@RequestBody CategoryRequestRecord categoryRecord){
-        Category category =categoryService.updateCategory(id,CategoryMapper.toCategory(categoryRecord));
-        ApiResponse<CategoryResponseRecord> apiResponse=new ApiResponse<>(CategoryMapper.toCategoryResponseRecord(category),"Category has been updated successfully",HttpStatus.CREATED.value());
-        return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<CategoryResponseRecord>> updateCategory(
+            @NotNull(message = "ID must not be null")
+            @Positive(message = "ID must be greater than zero")
+            @PathVariable("id") Long id,
+
+            @Validated(OnUpdate.class)
+            @RequestBody CategoryRequestRecord categoryRecord) {
+
+        Category category = categoryService.updateCategory(id, CategoryMapper.toCategory(categoryRecord));
+
+        ApiResponse<CategoryResponseRecord> apiResponse = new ApiResponse<>(
+                CategoryMapper.toCategoryResponseRecord(category),
+                "Category has been updated successfully",
+                HttpStatus.OK.value()
+        );
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+
 
     @PutMapping("{id}")
-    public ResponseEntity<?> replaceCategory(@NotNull(message = "ID must not be null")@Positive(message = "ID must be greater than zero")@PathVariable("id") Long id,@Validated(OnReplace.class)@RequestBody CategoryRequestRecord categoryRecord){
-        Category category =categoryService.replaceCategory(id,CategoryMapper.toCategory(categoryRecord));
-        ApiResponse<CategoryResponseRecord> apiResponse=new ApiResponse<>(CategoryMapper.toCategoryResponseRecord(category),"Category has been replaced successfully",HttpStatus.CREATED.value());
-        return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<CategoryResponseRecord>> replaceCategory(
+            @NotNull(message = "ID must not be null")
+            @Positive(message = "ID must be greater than zero")
+            @PathVariable("id") Long id,
+
+            @Validated(OnReplace.class)
+            @RequestBody CategoryRequestRecord categoryRecord) {
+
+        Category category = categoryService.replaceCategory(id, CategoryMapper.toCategory(categoryRecord));
+        ApiResponse<CategoryResponseRecord> apiResponse = new ApiResponse<>(
+                CategoryMapper.toCategoryResponseRecord(category),
+                "Category has been replaced successfully",
+                HttpStatus.OK.value()
+        );
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteCategory(@NotNull(message = "ID must not be null")@Positive(message = "ID must be greater than zero")@PathVariable("id") Long id){
+    public ResponseEntity<ApiResponse<Void>> deleteCategory(
+            @NotNull(message = "ID must not be null")
+            @Positive(message = "ID must be greater than zero")
+            @PathVariable("id") Long id) {
+
         categoryService.deleteCategory(id);
-        Map<String,Object> response=new HashMap<>();
-        response.put("message","Category has been deleted successfully");
-        response.put("status",HttpStatus.OK);
-        return ResponseEntity.ok(response);
+
+        ApiResponse<Void> apiResponse = new ApiResponse<>(
+                null,
+                "Category has been deleted successfully",
+                HttpStatus.NO_CONTENT.value()
+        );
+        return new ResponseEntity<>(apiResponse, HttpStatus.NO_CONTENT);
     }
+
 }
