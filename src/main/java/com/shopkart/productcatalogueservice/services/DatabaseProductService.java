@@ -21,7 +21,6 @@ import java.util.Optional;
 public class DatabaseProductService implements ProductService{
     private CategoryRepository categoryRepository;
     private ProductRepository productRepository;
-
     @Autowired
     public DatabaseProductService(CategoryRepository categoryRepository,ProductRepository productRepository){
         this.categoryRepository=categoryRepository;
