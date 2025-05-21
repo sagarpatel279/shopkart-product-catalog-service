@@ -10,10 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
