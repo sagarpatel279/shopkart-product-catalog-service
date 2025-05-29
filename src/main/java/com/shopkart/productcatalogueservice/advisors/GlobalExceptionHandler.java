@@ -1,5 +1,6 @@
 package com.shopkart.productcatalogueservice.advisors;
 
+import com.shopkart.productcatalogueservice.clients.fakestoreapi.exceptions.FakeStoreAPIException;
 import com.shopkart.productcatalogueservice.exceptions.*;
 import jakarta.el.MethodNotFoundException;
 import org.springframework.http.HttpStatus;

@@ -18,8 +18,5 @@ public record ProductRequestRecord(
         String categoryName,
         @NotBlank(groups = {OnCreate.class,OnReplace.class},message = "Image URL must be provided to create  or replace a Product")
         String imageUrl){
-//        ,RatingResponseRecord rating) {
 
-//        public static record RatingResponseRecord(Double rate,Integer count){}
 }
-//
