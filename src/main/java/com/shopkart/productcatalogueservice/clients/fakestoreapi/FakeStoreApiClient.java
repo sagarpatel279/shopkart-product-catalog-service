@@ -19,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class FakeStoreApiClient {
     private RestTemplateBuilder restTemplateBuilder;
-    private RestTemplate restTemplate;
     private String productRequestsBaseUrl ;
     private String productRequestsByCategoryBaseUrl;
 
