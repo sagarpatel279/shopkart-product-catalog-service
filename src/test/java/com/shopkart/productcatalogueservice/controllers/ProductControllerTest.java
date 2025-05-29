@@ -7,24 +7,19 @@ import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.services.ProductService;
 import static org.junit.jupiter.api.Assertions.*;
 
-import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.util.List;
+import java.util.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,7 +36,7 @@ class ProductControllerTest {
         // Positive Cases
         @Test
         @DisplayName("Should return 200 OK with single product")
-        void getAllProducts_ReturnsSingleProduct_WithOK() {
+        void testGetAllProducts_ReturnsSingleProduct_WithOK() {
             // Arrange
             Product product = createProduct(1L, "Product 1", "Description", 99.99, "Category 1");
             when(productService.getAllProducts()).thenReturn(List.of(product));
@@ -223,7 +218,6 @@ class ProductControllerTest {
             verifyNoMoreInteractions(productService);
         }
 
-        // Helper method to create test products
         private Product createProduct(Long id, String name, String description,
                                       Double price, String categoryName) {
             Product product = new Product();

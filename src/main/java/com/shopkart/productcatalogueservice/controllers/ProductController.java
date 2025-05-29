@@ -43,14 +43,14 @@ public class ProductController {
                     "Error retrieving products",
                     HttpStatus.INTERNAL_SERVER_ERROR.value()
             );
-            return ResponseEntity.ok(emptyResponse);
+            return new ResponseEntity<>(emptyResponse,HttpStatus.INTERNAL_SERVER_ERROR);
         }else if(products.isEmpty()){
             ApiResponse<List<ProductResponseRecord>> emptyResponse = new ApiResponse<>(
                     Collections.emptyList(),
-                    "No records found",
+                    "No products found",
                     HttpStatus.NO_CONTENT.value()
             );
-            return ResponseEntity.ok(emptyResponse);
+            return new ResponseEntity<>(emptyResponse,HttpStatus.NO_CONTENT);
         }
         List<ProductResponseRecord> responseRecords = products.stream()
                 .map(ProductMapper::toProductResponseRecord)
@@ -58,7 +58,7 @@ public class ProductController {
 
         ApiResponse<List<ProductResponseRecord>> apiResponse = new ApiResponse<>(
                 responseRecords,
-                "Successfully fetched data",
+                "Products retrieved successfully",
                 HttpStatus.OK.value()
         );
 
@@ -75,7 +75,7 @@ public class ProductController {
 
         ApiResponse<ProductResponseRecord> apiResponse = new ApiResponse<>(
                 productResponse,
-                "Successfully fetched data",
+                "Products retrieved successfully",
                 HttpStatus.OK.value()
         );
 
