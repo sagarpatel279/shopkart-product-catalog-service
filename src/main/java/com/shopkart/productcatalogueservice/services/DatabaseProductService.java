@@ -31,7 +31,7 @@ public class DatabaseProductService implements ProductService{
         Category category=createOrUpdateAsPerCategoryExist(product.getCategory());
         boolean exist=productRepository.existsByNameAndStateAndCategory_NameAndCategory_State(product.getName(),State.ACTIVE,category.getName(),State.ACTIVE);
         if(exist){
-            throw new ProductExistWithCategoryException("Product already exists in given category");
+            throw new ProductExistWithCategoryException("Product already exists in given categoryName");
         }
         product.setCategory(category);
         return productRepository.save(product);
@@ -98,7 +98,7 @@ public class DatabaseProductService implements ProductService{
         category=slugToCategoryName(category);
         boolean categoryExist=categoryRepository.existsByNameAndState(category,State.ACTIVE);
         if(!categoryExist)
-            throw new CategoryNotFoundException("Category could not be found by given category categoryName");
+            throw new CategoryNotFoundException("Category could not be found by given categoryName categoryName");
         return productRepository.findAllByStateAndCategory_Name(State.ACTIVE,category);
     }
 

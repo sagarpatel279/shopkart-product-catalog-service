@@ -147,7 +147,7 @@ public class ProductController {
     @GetMapping("/category/{category}")
     public ResponseEntity<ApiResponse<List<ProductResponseRecord>>> getAllProductsByCategory(
             @PathVariable("category")
-            @NotBlank(message = "Category name must be provided")
+            @NotBlank(message = "Category productName must be provided")
             String category) {
 
         List<Product> products = productService.getAllProductsByCategory(category);
@@ -155,7 +155,7 @@ public class ProductController {
         if (products.isEmpty()) {
             ApiResponse<List<ProductResponseRecord>> emptyResponse = new ApiResponse<>(
                     Collections.emptyList(),
-                    "No records found for the given category",
+                    "No records found for the given categoryName",
                     HttpStatus.OK.value()
             );
             return ResponseEntity.ok(emptyResponse);
@@ -171,7 +171,7 @@ public class ProductController {
     private Product from(ProductRequestRecord productRequestRecord){
         Product product=new Product();
         product.setId(productRequestRecord.id());
-        product.setName(productRequestRecord.name());
+        product.setName(productRequestRecord.productName());
         product.setPrice(productRequestRecord.price());
         product.setDescription(productRequestRecord.description());
         product.setImageUrl(productRequestRecord.imageUrl());

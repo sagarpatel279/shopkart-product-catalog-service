@@ -11,21 +11,21 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
-//    @Query("SELECT p FROM products p JOIN FETCH p.category where p.state=:state")
+//    @Query("SELECT p FROM products p JOIN FETCH p.categoryName where p.state=:state")
 
-    @EntityGraph(attributePaths = {"category","ratings"})
+    @EntityGraph(attributePaths = {"categoryName","ratings"})
     List<Product> findAllByState(State state);
 
-//    @Query("SELECT p FROM products p JOIN FETCH p.category where p.state=:state and p.category.categoryName=:category")
-    @EntityGraph(attributePaths = {"category","ratings"})
+//    @Query("SELECT p FROM products p JOIN FETCH p.categoryName where p.state=:state and p.categoryName.categoryName=:categoryName")
+    @EntityGraph(attributePaths = {"categoryName","ratings"})
     List<Product> findAllByStateAndCategory_Name(State state,String category);
 
-    @EntityGraph(attributePaths = {"category","ratings"})
+    @EntityGraph(attributePaths = {"categoryName","ratings"})
     boolean existsByNameAndStateAndCategory_NameAndCategory_State(String name, State state, String category, State categoryState);
 
-    @EntityGraph(attributePaths = {"category","ratings"})
+    @EntityGraph(attributePaths = {"categoryName","ratings"})
     Optional<Product> findByIdAndState(Long productId, State state);
 
-//    @EntityGraph(attributePaths = {"category","ratings"})
+//    @EntityGraph(attributePaths = {"categoryName","ratings"})
 //    boolean existsByCategory_IdAndState(Long categoryId, State state);
 }

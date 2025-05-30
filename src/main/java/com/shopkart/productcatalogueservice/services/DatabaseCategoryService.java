@@ -75,7 +75,7 @@ public class DatabaseCategoryService implements CategoryService{
                 .orElseThrow(()-> new CategoryNotFoundException("Category could not be found by given Id"));
         boolean productsByCategoryExist=categoryRepository.existsCategoryReferenceInNotDeletedChildEntity(categoryId,State.DELETED);
         if(productsByCategoryExist)
-            throw new CategoryOnDeleteException("Category could not be deleted because products associated with category are exists");
+            throw new CategoryOnDeleteException("Category could not be deleted because products associated with categoryName are exists");
         category.setState(State.DELETED);
         category.setUpdatedAt(new Date());
         categoryRepository.save(category);

@@ -60,7 +60,7 @@ class ProductControllerTest {
             assertEquals("Product 1", responseRecord.productName());
             assertEquals("Description", responseRecord.description());
             assertEquals(99.99, responseRecord.price());
-            assertEquals("Category 1", responseRecord.category());
+            assertEquals("Category 1", responseRecord.categoryName());
         }
 
         @Test
@@ -159,7 +159,7 @@ class ProductControllerTest {
             assertNull(record.productName());
             assertNull(record.description());
             assertNull(record.price());
-            assertNull(record.category());
+            assertNull(record.categoryName());
         }
 
         @Test
@@ -201,7 +201,7 @@ class ProductControllerTest {
             ProductResponseRecord record = response.getBody().data().get(0);
             assertEquals("Product!@#$%", record.productName());
             assertEquals("Description with üñíçødé", record.description());
-            assertEquals("Category & Special < > ' \"", record.category());
+            assertEquals("Category & Special < > ' \"", record.categoryName());
         }
 
         @Test

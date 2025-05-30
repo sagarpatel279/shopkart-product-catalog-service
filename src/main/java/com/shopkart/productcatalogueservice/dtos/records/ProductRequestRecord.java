@@ -7,7 +7,7 @@ public record ProductRequestRecord(
         @Null(groups = {OnUpdate.class, OnReplace.class, OnCreate.class},message = "ID must be null to apply CRUD on Product")
         Long id,
         @NotBlank(groups = {OnCreate.class,OnReplace.class},message = "Name must be required to create or replace a Product")
-        String name,
+        String productName,
         @NotNull(groups = {OnCreate.class,OnReplace.class},message = "Price must be required to create or replace a Product")
         @DecimalMin(groups = {OnCreate.class, OnUpdate.class, OnReplace.class},value = "0.0", inclusive = false,message="Price must be greater than 0")
         @DecimalMax(groups = {OnCreate.class, OnUpdate.class, OnReplace.class},value = "1.7976931348623157E308", message="Price is incorrect")

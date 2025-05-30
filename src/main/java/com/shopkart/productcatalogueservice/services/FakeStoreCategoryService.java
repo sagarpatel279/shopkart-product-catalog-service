@@ -1,14 +1,22 @@
 package com.shopkart.productcatalogueservice.services;
 
+import com.shopkart.productcatalogueservice.clients.fakestoreapi.FakeStoreApiCategoryClient;
+import com.shopkart.productcatalogueservice.clients.fakestoreapi.records.FakeStoreCategoryRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @Profile("fakestore")
 public class FakeStoreCategoryService implements CategoryService{
+
+    private FakeStoreApiCategoryClient fakeStoreApiCategoryClient;
+    public FakeStoreCategoryService(FakeStoreApiCategoryClient fakeStoreApiCategoryClient){
+        this.fakeStoreApiCategoryClient=fakeStoreApiCategoryClient;
+    }
     @Override
     public Category createCategory(Category category) {
         return null;
@@ -26,7 +34,7 @@ public class FakeStoreCategoryService implements CategoryService{
 
     @Override
     public List<Category> getAllCategory() {
-        return List.of();
+        return from(fakeStoreApiCategoryClient.getAllFakeStoreCategories());
     }
 
     @Override
@@ -37,5 +45,14 @@ public class FakeStoreCategoryService implements CategoryService{
     @Override
     public void deleteCategory(Long categoryId) {
 
+    }
+
+    private Category from(String categoryName){
+        Category category=new Category();
+        category.setName(categoryName);
+        return category;
+    }
+    private List<Category> from(String[] categories){
+        return Arrays.stream(categories).map(this::from).toList();
     }
 }

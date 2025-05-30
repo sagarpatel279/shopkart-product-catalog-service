@@ -1,6 +1,6 @@
 package com.shopkart.productcatalogueservice.services;
 
-import com.shopkart.productcatalogueservice.clients.fakestoreapi.FakeStoreApiClient;
+import com.shopkart.productcatalogueservice.clients.fakestoreapi.FakeStoreApiProductClient;
 import com.shopkart.productcatalogueservice.clients.fakestoreapi.records.FakeStoreProductRequestRecord;
 import com.shopkart.productcatalogueservice.clients.fakestoreapi.records.FakeStoreProductResponseRecord;
 import com.shopkart.productcatalogueservice.clients.fakestoreapi.records.FakeStoreRatingResponseRecord;
@@ -11,58 +11,55 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @Profile("fakestore")
 public class FakeStoreProductService implements ProductService{
 
-    private FakeStoreApiClient fakeStoreApiClient;
-    public FakeStoreProductService(FakeStoreApiClient fakeStoreApiClient){
-        this.fakeStoreApiClient=fakeStoreApiClient;
+    private FakeStoreApiProductClient fakeStoreApiProductClient;
+    public FakeStoreProductService(FakeStoreApiProductClient fakeStoreApiProductClient){
+        this.fakeStoreApiProductClient = fakeStoreApiProductClient;
     }
 
     @Override
     public Product createProduct(Product product) {
-        return from(fakeStoreApiClient.createFakeStoreProduct(from(product)));
+        return from(fakeStoreApiProductClient.createFakeStoreProduct(from(product)));
     }
 
     @Override
     public Product updateProduct(Long productId, Product product) {
-        return from(fakeStoreApiClient.updateFakeStoreProduct(productId,from(product)));
+        return from(fakeStoreApiProductClient.updateFakeStoreProduct(productId,from(product)));
     }
 
     @Override
     public Product replaceProduct(Long productId, Product product) {
-        return from(fakeStoreApiClient.replaceFakeStoreProduct(productId,from(product)));
+        return from(fakeStoreApiProductClient.replaceFakeStoreProduct(productId,from(product)));
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return from(fakeStoreApiClient.getAllFakeStoreProducts());
+        return from(fakeStoreApiProductClient.getAllFakeStoreProducts());
     }
 
     @Override
     public Product getProduct(Long productId) {
-        return from(fakeStoreApiClient.getSingleFakeStoreProduct(productId));
+        return from(fakeStoreApiProductClient.getSingleFakeStoreProduct(productId));
     }
 
     @Override
     public void deleteProduct(Long productId) {
-        fakeStoreApiClient.deleteFakeStoreProduct(productId);
+        fakeStoreApiProductClient.deleteFakeStoreProduct(productId);
     }
 
     @Override
     public List<Product> getAllProductsByCategory(String category) {
-        return from(fakeStoreApiClient.getProductsByCategory(category));
+        return from(fakeStoreApiProductClient.getProductsByCategory(category));
     }
 
     private List<Product> from(FakeStoreProductResponseRecord[] fakeStoreProductResponseRecords){
-        List<Product> products=new ArrayList<>();
-        for(FakeStoreProductResponseRecord responseRecord:fakeStoreProductResponseRecords){
-            products.add(from(responseRecord));
-        }
-        return products;
+        return Arrays.stream(fakeStoreProductResponseRecords).map(this::from).toList();
     }
     private Product from(FakeStoreProductResponseRecord fakeStoreProductResponseRecord){
         Product product=new Product();
