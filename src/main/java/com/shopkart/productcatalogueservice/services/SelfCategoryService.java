@@ -16,11 +16,11 @@ import java.util.Optional;
 
 @Service
 @Profile("database")
-public class DatabaseCategoryService implements CategoryService{
+public class SelfCategoryService implements ICategoryService {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    public DatabaseCategoryService(CategoryRepository categoryRepository){
+    public SelfCategoryService(CategoryRepository categoryRepository){
         this.categoryRepository=categoryRepository;
     }
     @Override

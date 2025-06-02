@@ -5,7 +5,7 @@ import com.shopkart.productcatalogueservice.dtos.records.ApiResponse;
 import com.shopkart.productcatalogueservice.dtos.records.CategoryRequestRecord;
 import com.shopkart.productcatalogueservice.dtos.records.CategoryResponseRecord;
 import com.shopkart.productcatalogueservice.models.Category;
-import com.shopkart.productcatalogueservice.services.CategoryService;
+import com.shopkart.productcatalogueservice.services.ICategoryService;
 import com.shopkart.productcatalogueservice.validations.groups.OnCreate;
 import com.shopkart.productcatalogueservice.validations.groups.OnReplace;
 import com.shopkart.productcatalogueservice.validations.groups.OnUpdate;
@@ -17,17 +17,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("${shopkart.api.product-category-path}")
 public class CategoryController {
-    private CategoryService categoryService;
+    private ICategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService){
+    public CategoryController(ICategoryService categoryService){
         this.categoryService=categoryService;
     }
 

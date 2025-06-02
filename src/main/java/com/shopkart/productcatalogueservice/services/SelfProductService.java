@@ -18,11 +18,11 @@ import java.util.Optional;
 
 @Service
 @Profile("database")
-public class DatabaseProductService implements ProductService{
+public class SelfProductService implements IProductService {
     private CategoryRepository categoryRepository;
     private ProductRepository productRepository;
     @Autowired
-    public DatabaseProductService(CategoryRepository categoryRepository,ProductRepository productRepository){
+    public SelfProductService(CategoryRepository categoryRepository, ProductRepository productRepository){
         this.categoryRepository=categoryRepository;
         this.productRepository=productRepository;
     }

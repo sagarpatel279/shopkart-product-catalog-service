@@ -4,7 +4,7 @@ import com.shopkart.productcatalogueservice.models.Product;
 
 import java.util.List;
 
-public interface ProductService {
+public interface IProductService {
     Product createProduct(Product product);
     Product updateProduct(Long productId, Product product);
     Product replaceProduct(Long productId, Product product);

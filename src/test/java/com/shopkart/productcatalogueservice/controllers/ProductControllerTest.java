@@ -4,7 +4,7 @@ import com.shopkart.productcatalogueservice.dtos.records.ApiResponse;
 import com.shopkart.productcatalogueservice.dtos.records.ProductResponseRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.Product;
-import com.shopkart.productcatalogueservice.services.ProductService;
+import com.shopkart.productcatalogueservice.services.IProductService;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 class ProductControllerTest {
 
         @Mock
-        private ProductService productService;
+        private IProductService productService;
 
         @InjectMocks
         private ProductController productController;

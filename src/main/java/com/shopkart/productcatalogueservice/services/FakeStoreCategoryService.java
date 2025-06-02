@@ -1,7 +1,6 @@
 package com.shopkart.productcatalogueservice.services;
 
 import com.shopkart.productcatalogueservice.clients.fakestoreapi.FakeStoreApiCategoryClient;
-import com.shopkart.productcatalogueservice.clients.fakestoreapi.records.FakeStoreCategoryRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,7 @@ import java.util.List;
 
 @Service
 @Profile("fakestore")
-public class FakeStoreCategoryService implements CategoryService{
+public class FakeStoreCategoryService implements ICategoryService {
 
     private FakeStoreApiCategoryClient fakeStoreApiCategoryClient;
     public FakeStoreCategoryService(FakeStoreApiCategoryClient fakeStoreApiCategoryClient){

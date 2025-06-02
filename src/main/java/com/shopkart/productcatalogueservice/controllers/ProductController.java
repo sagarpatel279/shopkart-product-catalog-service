@@ -7,7 +7,7 @@ import com.shopkart.productcatalogueservice.dtos.records.ProductResponseRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.models.ProductRating;
-import com.shopkart.productcatalogueservice.services.ProductService;
+import com.shopkart.productcatalogueservice.services.IProductService;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.shopkart.productcatalogueservice.validations.groups.OnCreate;
@@ -27,10 +27,10 @@ import java.util.List;
 @RestController
 @RequestMapping("${shopkart.api.product-path}")
 public class ProductController {
-    private final ProductService productService;
+    private final IProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService){
+    public ProductController(IProductService productService){
         this.productService=productService;
     }
 
