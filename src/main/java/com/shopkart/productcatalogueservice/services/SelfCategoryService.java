@@ -71,11 +71,10 @@ public class SelfCategoryService implements ICategoryService {
 
     @Override
     public void deleteCategory(Long categoryId) {
-        Category category=categoryRepository.findByIdAndState(categoryId,State.ACTIVE)
-                .orElseThrow(()-> new CategoryNotFoundException("Category could not be found by given Id"));
-        boolean productsByCategoryExist=categoryRepository.existsCategoryReferenceInNotDeletedChildEntity(categoryId,State.DELETED);
-        if(productsByCategoryExist)
-            throw new CategoryOnDeleteException("Category could not be deleted because products associated with categoryName are exists");
+        Optional<Category> categoryOptional=categoryRepository.findByIdAndStateAndProductsIsEmpty(categoryId,State.ACTIVE);
+        if(categoryOptional.isEmpty())
+            throw new CategoryOnDeleteException("Category could not be found or deleted...!");
+        Category category=categoryOptional.get();
         category.setState(State.DELETED);
         category.setUpdatedAt(new Date());
         categoryRepository.save(category);

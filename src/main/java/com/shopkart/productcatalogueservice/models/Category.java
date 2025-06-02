@@ -19,7 +19,7 @@ public class Category extends BaseModel{
     @OneToMany
     private List<Product> featuredProducts;
     @OneToMany(mappedBy = "category")
-    private List<Product> allProducts;
+    private List<Product> products;
 
     public Category(String categoryName, String description) {
         this.name=categoryName;

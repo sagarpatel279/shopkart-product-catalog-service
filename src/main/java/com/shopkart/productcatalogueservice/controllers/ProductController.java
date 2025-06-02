@@ -77,7 +77,7 @@ public class ProductController {
         return ResponseEntity.ok(apiResponse);
     }
     @PostMapping("")
-//    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<ApiResponse<ProductResponseRecord>> createProduct(
             @RequestBody @Validated(OnCreate.class) ProductRequestRecord requestRecord) {
 
@@ -187,10 +187,6 @@ public class ProductController {
                 product.getCategory().getName(),product.getImageUrl(),productRating!=null?new ProductRatingRecord(productRating.getAverageRate(),productRating.getReviewCount()):null);
     }
     private List<ProductResponseRecord> from(List<Product> products){
-        List<ProductResponseRecord> productResponseRecord=new ArrayList<>();
-        for(Product product:products){
-            productResponseRecord.add(from(product));
-        }
-        return productResponseRecord;
+        return products.stream().map(this::from).toList();
     }
 }
