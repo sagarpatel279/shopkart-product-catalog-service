@@ -1,5 +1,6 @@
 package com.shopkart.productcatalogueservice.repositories;
 
+import com.shopkart.productcatalogueservice.dtos.records.db.CategoryIdNameDescriptionDbRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.State;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -17,14 +18,15 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
 //    @EntityGraph(attributePaths = {"products"})
     Optional<Category> findByNameAndState(String name,State state);
 
-    List<Category> findAllByState(State state);
+    @Query(value = CategoryNativeQueries.findAllActiveCategories,nativeQuery = true)
+    List<CategoryIdNameDescriptionDbRecord> findAllByState(State state);
 
     boolean existsByNameAndState(String category, State state);
 
     boolean existsByIdAndState(Long categoryId, State state);
 
+//    @Query(value = CategoryNativeQueries.findCategoryWithFeaturedAndAllProducts,nativeQuery = true)
     Optional<Category> findByIdAndState(Long categoryId, State state);
-
 
     Optional<Category> findByIdAndStateAndProductsIsEmpty(Long categoryId,State state);
 }

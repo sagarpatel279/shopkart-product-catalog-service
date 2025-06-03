@@ -1,9 +1,9 @@
 package com.shopkart.productcatalogueservice.controllers;
 
-import com.shopkart.productcatalogueservice.dtos.records.ApiResponse;
-import com.shopkart.productcatalogueservice.dtos.records.ProductRatingRecord;
-import com.shopkart.productcatalogueservice.dtos.records.ProductRequestRecord;
-import com.shopkart.productcatalogueservice.dtos.records.ProductResponseRecord;
+import com.shopkart.productcatalogueservice.dtos.records.controller.ApiResponse;
+import com.shopkart.productcatalogueservice.dtos.records.controller.ProductRatingRecord;
+import com.shopkart.productcatalogueservice.dtos.records.controller.ProductRequestRecord;
+import com.shopkart.productcatalogueservice.dtos.records.controller.ProductResponseRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.models.ProductRating;
@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

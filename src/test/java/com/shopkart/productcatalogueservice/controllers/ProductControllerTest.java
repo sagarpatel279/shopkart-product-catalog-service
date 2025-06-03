@@ -1,7 +1,7 @@
 package com.shopkart.productcatalogueservice.controllers;
 
-import com.shopkart.productcatalogueservice.dtos.records.ApiResponse;
-import com.shopkart.productcatalogueservice.dtos.records.ProductResponseRecord;
+import com.shopkart.productcatalogueservice.dtos.records.controller.ApiResponse;
+import com.shopkart.productcatalogueservice.dtos.records.controller.ProductResponseRecord;
 import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.services.IProductService;

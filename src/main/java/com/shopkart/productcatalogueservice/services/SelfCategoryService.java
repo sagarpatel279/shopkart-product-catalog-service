@@ -1,5 +1,6 @@
 package com.shopkart.productcatalogueservice.services;
 
+import com.shopkart.productcatalogueservice.dtos.records.db.CategoryIdNameDescriptionDbRecord;
 import com.shopkart.productcatalogueservice.exceptions.CategoryAlreadyExistException;
 import com.shopkart.productcatalogueservice.exceptions.CategoryOnDeleteException;
 import com.shopkart.productcatalogueservice.exceptions.CategoryNotFoundException;
@@ -58,7 +59,7 @@ public class SelfCategoryService implements ICategoryService {
 
     @Override
     public List<Category> getAllCategory() {
-        return categoryRepository.findAllByState(State.ACTIVE);
+        return from(categoryRepository.findAllByState(State.ACTIVE));
     }
 
     @Override
@@ -78,5 +79,16 @@ public class SelfCategoryService implements ICategoryService {
         category.setState(State.DELETED);
         category.setUpdatedAt(new Date());
         categoryRepository.save(category);
+    }
+
+    private Category from(CategoryIdNameDescriptionDbRecord categoryDbRecord){
+        Category category=new Category();
+        category.setId(categoryDbRecord.id());
+        category.setName(categoryDbRecord.name());
+        category.setDescription(categoryDbRecord.description());
+        return category;
+    }
+    private List<Category> from(List<CategoryIdNameDescriptionDbRecord> categoryDbRecords){
+        return categoryDbRecords.stream().map(this::from).toList();
     }
 }

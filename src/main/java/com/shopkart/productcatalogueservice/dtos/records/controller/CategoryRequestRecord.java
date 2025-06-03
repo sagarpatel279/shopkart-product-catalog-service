@@ -1,4 +1,4 @@
-package com.shopkart.productcatalogueservice.dtos.records;
+package com.shopkart.productcatalogueservice.dtos.records.controller;
 
 import com.shopkart.productcatalogueservice.validations.groups.OnCreate;
 import com.shopkart.productcatalogueservice.validations.groups.OnUpdate;

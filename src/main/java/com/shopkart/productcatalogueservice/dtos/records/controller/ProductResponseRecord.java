@@ -1,4 +1,4 @@
-package com.shopkart.productcatalogueservice.dtos.records;
+package com.shopkart.productcatalogueservice.dtos.records.controller;
 
 public record ProductResponseRecord(Long id
         , String productName, Double price, String description
