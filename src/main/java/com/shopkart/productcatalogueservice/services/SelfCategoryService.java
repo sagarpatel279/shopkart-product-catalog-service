@@ -59,7 +59,7 @@ public class SelfCategoryService implements ICategoryService {
 
     @Override
     public List<Category> getAllCategory() {
-        return from(categoryRepository.findAllByState(State.ACTIVE));
+        return from(categoryRepository.findByState(State.ACTIVE.name()));
     }
 
     @Override
@@ -91,4 +91,5 @@ public class SelfCategoryService implements ICategoryService {
     private List<Category> from(List<CategoryIdNameDescriptionDbRecord> categoryDbRecords){
         return categoryDbRecords.stream().map(this::from).toList();
     }
+
 }
