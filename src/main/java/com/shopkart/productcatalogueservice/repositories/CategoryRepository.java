@@ -18,6 +18,7 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
     Optional<Category> findByNameAndState(String name,State state);
 
     @Query(value = CategoryNativeQueries.findAllActiveCategories,nativeQuery = true)
+//    List<Category> findByState(@Param("stateName") String stateName);
     List<CategoryIdNameDescriptionDbRecord> findByState(@Param("stateName") String stateName);
 
 //    List<Category> findByState(State state);
