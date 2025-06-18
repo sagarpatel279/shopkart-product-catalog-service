@@ -1,5 +1,7 @@
 package com.shopkart.productcatalogueservice.clients.fakestoreapi.records;
-public record FakeStoreRatingResponseRecord(
+
+import java.io.Serializable;
+
+public record FakeStoreRatingResponseRecord (
         Double rate,
-        Integer count
-){}
+        Integer count) implements Serializable {}

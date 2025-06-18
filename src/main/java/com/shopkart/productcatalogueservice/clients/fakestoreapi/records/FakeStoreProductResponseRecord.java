@@ -1,5 +1,7 @@
 package com.shopkart.productcatalogueservice.clients.fakestoreapi.records;
 
+import java.io.Serializable;
+
 public record FakeStoreProductResponseRecord(
         Long id,
         String title,
@@ -7,7 +9,4 @@ public record FakeStoreProductResponseRecord(
         String description,
         String category,
         String image,
-        FakeStoreRatingResponseRecord rating
-) {
-
-}
+        FakeStoreRatingResponseRecord rating) implements Serializable {}

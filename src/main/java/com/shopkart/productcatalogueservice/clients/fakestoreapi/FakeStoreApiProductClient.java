@@ -3,8 +3,10 @@ package com.shopkart.productcatalogueservice.clients.fakestoreapi;
 import com.shopkart.productcatalogueservice.clients.fakestoreapi.records.FakeStoreProductRequestRecord;
 import com.shopkart.productcatalogueservice.clients.fakestoreapi.records.FakeStoreProductResponseRecord;
 import com.shopkart.productcatalogueservice.clients.fakestoreapi.exceptions.FakeStoreAPIException;
+import com.shopkart.productcatalogueservice.clients.fakestoreapi.records.FakeStoreRatingResponseRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -21,14 +23,17 @@ public class FakeStoreApiProductClient {
     private RestTemplateBuilder restTemplateBuilder;
     private String productsRequestsBaseUrl ;
     private String productsRequestsByCategoryBaseUrl;
-
+    private RedisTemplate<Long,Object> redisTemplate;
+    private final static String PRODUCT_CACHE_KEY="products";
     public FakeStoreApiProductClient(RestTemplateBuilder restTemplateBuilder,
                                      @Value("${fakestore.api.url}") String fakeStoreApiUrl,
                                      @Value("${fakestore.api.paths.products}") String fakeStoreProductsApiPath,
-                                     @Value("${fakestore.api.paths.category}") String fakeStoreCategoryApiPath){
+                                     @Value("${fakestore.api.paths.category}") String fakeStoreCategoryApiPath,
+                                     RedisTemplate<Long,Object> redisTemplate){
         this.restTemplateBuilder=restTemplateBuilder;
         this.productsRequestsBaseUrl  = fakeStoreApiUrl + fakeStoreProductsApiPath;
         this.productsRequestsByCategoryBaseUrl=this.productsRequestsBaseUrl+fakeStoreCategoryApiPath;
+        this.redisTemplate=redisTemplate;
     }
 
     private <T> ResponseEntity<T> requestForEntity(String url, HttpMethod httpMethod,
@@ -70,11 +75,17 @@ public class FakeStoreApiProductClient {
     }
 
     public FakeStoreProductResponseRecord getSingleFakeStoreProduct(Long productId){
+        FakeStoreProductResponseRecord responseRecord= (FakeStoreProductResponseRecord) redisTemplate.opsForHash().get(productId,PRODUCT_CACHE_KEY);
+        if(responseRecord!=null)
+            return responseRecord;
         ResponseEntity<FakeStoreProductResponseRecord> responseEntity= requestForEntity(productsRequestsBaseUrl+"/{id}",
                 HttpMethod.GET,null, FakeStoreProductResponseRecord.class,productId);
         if(!responseEntity.getStatusCode().is2xxSuccessful() || !responseEntity.hasBody()){
             throw new FakeStoreAPIException("Product could not be found by Product Id: "+productId+" on Fake Store API...!");
         }
+        responseRecord=responseEntity.getBody();
+        assert responseRecord != null;
+        redisTemplate.opsForHash().put(productId,PRODUCT_CACHE_KEY,responseRecord);
         return responseEntity.getBody();
     }
 
