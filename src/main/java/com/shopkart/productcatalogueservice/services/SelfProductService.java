@@ -10,6 +10,10 @@ import com.shopkart.productcatalogueservice.repositories.CategoryRepository;
 import com.shopkart.productcatalogueservice.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -102,10 +106,27 @@ public class SelfProductService implements IProductService {
         return productRepository.findAllByStateAndCategory_Name(State.ACTIVE,category);
     }
 
+    @Override
+    public Page<Product> searchProductsInProductTitle(String query, int numberOfResults, int offset, String sortBy) {
+        Pair<String,String> sortByPair=getSortFieldAndDirection(sortBy);
+        Sort sort=sortByPair.getSecond().equals("asc")?
+                Sort.by(sortByPair.getFirst()).ascending():
+                Sort.by(sortByPair.getFirst()).descending();
+        return productRepository.findAllByNameContaining(query,PageRequest.of((offset/numberOfResults),numberOfResults,sort));
+    }
+
     private String slugToCategoryName(String slug){
         if(slug == null || slug.isBlank()){
             throw new IllegalArgumentException("Category slug can not be null or empty");
         }
         return slug.replace("-"," ");
+    }
+
+    private Pair<String,String> getSortFieldAndDirection(String sortBy){
+        if(sortBy==null || sortBy.isBlank() || !sortBy.contains("_")){
+            throw new IllegalArgumentException("Category slug can not be null or empty");
+        }
+        String[] strArr=sortBy.split("_");
+        return Pair.of(strArr[0],strArr[1].equalsIgnoreCase("dsc")?"dsc":"asc");
     }
 }

@@ -8,6 +8,7 @@ import com.shopkart.productcatalogueservice.models.Category;
 import com.shopkart.productcatalogueservice.models.Product;
 import com.shopkart.productcatalogueservice.models.ProductRating;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -55,6 +56,11 @@ public class FakeStoreProductService implements IProductService {
     @Override
     public List<Product> getAllProductsByCategory(String category) {
         return from(fakeStoreApiProductClient.getProductsByCategory(category));
+    }
+
+    @Override
+    public Page<Product> searchProductsInProductTitle(String query, int numberOfResults, int offset,String sortBy) {
+        return null;
     }
 
     private List<Product> from(FakeStoreProductResponseRecord[] fakeStoreProductResponseRecords){

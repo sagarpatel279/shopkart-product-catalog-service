@@ -19,6 +19,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().permitAll()
                 )
+                .csrf(csrf->csrf.disable())
+                .cors(cors->cors.disable())
                 .oauth2ResourceServer((oauth2) -> oauth2
                         .jwt(Customizer.withDefaults())
                 );

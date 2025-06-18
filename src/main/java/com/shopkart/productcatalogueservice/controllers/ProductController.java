@@ -15,6 +15,8 @@ import com.shopkart.productcatalogueservice.validations.groups.OnReplace;
 import com.shopkart.productcatalogueservice.validations.groups.OnUpdate;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -165,6 +167,29 @@ public class ProductController {
                 HttpStatus.OK.value()
         );
 
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<ProductResponseRecord>>> searchProductsInProductTitle(@RequestParam("query") String query,
+                                                                                                 @RequestParam(value = "count",defaultValue = "5") int numberOfResults,
+                                                                                                 @RequestParam(value = "start",defaultValue = "0") int offset,
+                                                                                                 @RequestParam(value = "sort", defaultValue = "name_asc") String sortBy, Sort sort){
+        Page<Product> searchedProducts=productService.searchProductsInProductTitle(query,numberOfResults,offset,sortBy);
+        if(searchedProducts==null || searchedProducts.isEmpty()){
+            ApiResponse<Page<ProductResponseRecord>> emptyResponse = new ApiResponse<>(
+                    null,
+                    "No records found for the search query: "+ query,
+                    HttpStatus.OK.value()
+            );
+            return ResponseEntity.ok(emptyResponse);
+        }
+        Page<ProductResponseRecord> searchedResponsesOfProducts=searchedProducts.map(this::from);
+        ApiResponse<Page<ProductResponseRecord>> apiResponse = new ApiResponse<>(
+                searchedResponsesOfProducts,
+                "Data have been fetched successfully",
+                HttpStatus.OK.value()
+        );
         return ResponseEntity.ok(apiResponse);
     }
     private Product from(ProductRequestRecord productRequestRecord){
